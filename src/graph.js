@@ -1,11 +1,16 @@
-//Example 
+//Example
 // Pairs => [[from,to],[to,from]]
 // Source => from
-// To => to 
+// To => to
 // Should return true.
-
-const bfs = function(pairs,source,target){
-  
+const makeGraph = (graph, [node, connectedTo]) => {
+  graph[node] = graph[node] || [];
+  graph[node].push(connectedTo);
+  return graph;
+};
+const bfs = (pairs, source, target) => {
+  const graph = pairs.reduce(makeGraph, {});
+  return true;
 };
 
-module.exports = {bfs};
+module.exports = { bfs };
