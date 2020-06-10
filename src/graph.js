@@ -10,7 +10,21 @@ const makeGraph = (graph, [node, connectedTo]) => {
 };
 const bfs = (pairs, source, target) => {
   const graph = pairs.reduce(makeGraph, {});
-  return true;
+  const visited = [];
+  const queue = [source];
+  let result = false;
+  while (queue.length && !result) {
+    const node = queue.shift();
+    if (node == target) result = true;
+    if (visited.includes(node)) continue;
+    visited.push(node);
+    const children = graph[node];
+    children.forEach(
+      child =>
+        !queue.includes(child) && !visited.includes(child) && queue.push(child)
+    );
+  }
+  return result;
 };
 
 module.exports = { bfs };
