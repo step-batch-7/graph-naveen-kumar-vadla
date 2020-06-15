@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { bfs } = require('./graph');
+const { bfs, dfs } = require('./graph');
 
 const main = () => {
   const data = fs.readFileSync('./src/data.txt', 'utf-8').trim().split('\n');
@@ -14,8 +14,11 @@ const main = () => {
     ['mm', 'jj'],
   ];
   for (const [source, target] of questions) {
-    const result = bfs(pairs, source, target);
-    console.log(source, '->', target, result ? '' : 'not', 'Found');
+    let result = bfs(pairs, source, target);
+    console.log('BFS', source, '->', target, result ? '' : 'not', 'Found');
+
+    result = dfs(pairs, source, target);
+    console.log('DFS', source, '->', target, result ? '' : 'not', 'Found');
   }
 };
 

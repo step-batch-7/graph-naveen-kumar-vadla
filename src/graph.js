@@ -32,4 +32,18 @@ const bfs = (pairs, source, target) => {
   return result;
 };
 
-module.exports = { bfs };
+const dfs = (pairs, source, target, visited = []) => {
+  visited.push(source);
+  const graph = pairs.reduce(makeGraph, {});
+  const children = graph[source] || [];
+  if (children.includes(target)) return true;
+  let result = false;
+  while (children.length && !result) {
+    const node = children.shift();
+    if (visited.includes(node)) continue;
+    result = dfs(pairs, node, target, visited) ? true : false;
+  }
+  return result;
+};
+
+module.exports = { bfs, dfs };
