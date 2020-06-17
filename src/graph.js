@@ -46,4 +46,19 @@ const dfs = (pairs, source, target, visited = []) => {
   return result;
 };
 
-module.exports = { bfs, dfs };
+const findPath = (pairs, source, target, visited = []) => {
+  visited.push(source);
+  const graph = pairs.reduce(makeGraph, {});
+  const children = graph[source] || [];
+  if (children.includes(target)) return [source, target];
+  let path = [];
+  while (children.length && !path.length) {
+    const node = children.shift();
+    if (visited.includes(node)) continue;
+    path = findPath(pairs, node, target, visited);
+    path = path.length ? [source, ...path] : [];
+  }
+  return path;
+};
+
+module.exports = { bfs, dfs, findPath };
