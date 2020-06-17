@@ -46,17 +46,15 @@ const getConnectionPath = (adjacencyList, source, target, visited) => {
   return path;
 };
 
-const dfs = (pairs, source, target) => {
-  const adjacencyList = pairs.reduce(makeAdjacencyList, {});
-  const visited = [];
-  const path = getConnectionPath(adjacencyList, source, target, visited);
-  return path.length != 0;
-};
-
 const findPath = (pairs, source, target) => {
   const adjacencyList = pairs.reduce(makeAdjacencyList, {});
   const visited = [];
   return getConnectionPath(adjacencyList, source, target, visited);
+};
+
+const dfs = (pairs, source, target) => {
+  const path = findPath(pairs, source, target);
+  return path.length != 0;
 };
 
 module.exports = { bfs, dfs, findPath };
