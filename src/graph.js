@@ -32,33 +32,31 @@ const bfs = (pairs, source, target) => {
   return result;
 };
 
-const dfs = (pairs, source, target, visited = []) => {
+const getConnectionPath = (graph, source, target, visited) => {
   visited.push(source);
-  const graph = pairs.reduce(makeGraph, {});
-  const children = graph[source] || [];
-  if (children.includes(target)) return true;
-  let result = false;
-  while (children.length && !result) {
-    const node = children.shift();
-    if (visited.includes(node)) continue;
-    result = dfs(pairs, node, target, visited) ? true : false;
-  }
-  return result;
-};
-
-const findPath = (pairs, source, target, visited = []) => {
-  visited.push(source);
-  const graph = pairs.reduce(makeGraph, {});
   const children = graph[source] || [];
   if (children.includes(target)) return [source, target];
   let path = [];
   while (children.length && !path.length) {
     const node = children.shift();
     if (visited.includes(node)) continue;
-    path = findPath(pairs, node, target, visited);
+    path = getConnectionPath(graph, node, target, visited);
     path = path.length ? [source, ...path] : [];
   }
   return path;
+};
+
+const dfs = (pairs, source, target) => {
+  const graph = pairs.reduce(makeGraph, {});
+  const visited = [];
+  const path = getConnectionPath(graph, source, target, visited);
+  return path.length != 0;
+};
+
+const findPath = (pairs, source, target) => {
+  const graph = pairs.reduce(makeGraph, {});
+  const visited = [];
+  return getConnectionPath(graph, source, target, visited);
 };
 
 module.exports = { bfs, dfs, findPath };
