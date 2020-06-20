@@ -3,9 +3,20 @@
 // Source => from
 // To => to
 // Should return true.
-const makeAdjacencyList = (adjacencyList, [node, child]) => {
+const makeAdjacencyList = (adjacencyList, [node, child], isDirected) => {
   adjacencyList[node] = adjacencyList[node] || [];
   adjacencyList[node].push(child);
+  if (isDirected) return adjacencyList;
+  adjacencyList[child] = adjacencyList[child] || [];
+  adjacencyList[child].push(node);
+  return adjacencyList;
+};
+
+const getAdjacencyList = (pairs, isDirected) => {
+  let adjacencyList = {};
+  for (const pair of pairs) {
+    adjacencyList = makeAdjacencyList(adjacencyList, pair, isDirected);
+  }
   return adjacencyList;
 };
 
@@ -17,7 +28,7 @@ const insertChildrenIntoQueue = (queue, visited, children) => {
 };
 
 const bfs = (pairs, source, target) => {
-  const adjacencyList = pairs.reduce(makeAdjacencyList, {});
+  const adjacencyList = getAdjacencyList(pairs, true);
   const visited = [];
   const queue = [];
   let result = false;
@@ -47,10 +58,12 @@ const getConnectionPath = (adjacencyList, source, target, visited) => {
 };
 
 const findPath = (pairs, source, target) => {
-  const adjacencyList = pairs.reduce(makeAdjacencyList, {});
+  const adjacencyList = getAdjacencyList(pairs, true);
   const visited = [];
   return getConnectionPath(adjacencyList, source, target, visited);
 };
+
+// The findPath uses the dfs mechanism to find the path so using findPath in dfs
 
 const dfs = (pairs, source, target) => {
   const path = findPath(pairs, source, target);
