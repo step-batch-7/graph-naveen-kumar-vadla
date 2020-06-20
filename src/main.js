@@ -1,10 +1,14 @@
 const fs = require('fs');
 const { bfs, dfs, findPath } = require('./graph');
 
+const parseInputMakePairs = data => {
+  const pairs = data.map(str => str.replace(/\|/g, '').trim().split('  '));
+  return pairs.map(p => p.map(a => (Number(a) ? Number(a) : a)));
+};
+
 const main = () => {
   const data = fs.readFileSync('./src/data.txt', 'utf-8').trim().split('\n');
-  let pairs = data.map(str => str.replace(/\|/g, '').trim().split('  '));
-  pairs = pairs.map(p => p.map(a => (Number(a) ? Number(a) : a)));
+  const pairs = parseInputMakePairs(data);
   const questions = [
     ['bb', 'jj'],
     ['jj', 'aa'],
