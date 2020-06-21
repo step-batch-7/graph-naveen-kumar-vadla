@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { bfs, dfs, findPath } = require('./graph');
-const { primsMST } = require('./weighted_graphs');
+const { primsMST, kruskalMST } = require('./weighted_graphs');
 
 const parseInputMakePairs = data => {
   const pairs = data.map(str => str.replace(/\|/g, '').trim().split('  '));
@@ -10,6 +10,7 @@ const parseInputMakePairs = data => {
 const main = () => {
   const data = fs.readFileSync('./src/data.txt', 'utf-8').trim().split('\n');
   const pairs = parseInputMakePairs(data);
+  console.log(pairs);
   const questions = [
     ['A', 'M'],
     ['A', 'J'],
@@ -26,9 +27,12 @@ const main = () => {
     path.forEach((p, i) => process.stdout.write(`${p} -> `));
     console.log('\n');
   }
-  const { newAdjacencyList, totalWeight } = primsMST(pairs, true);
-  console.log('Prims MinimumSpanningTree\n', newAdjacencyList);
-  console.log('Prims Total Weight', totalWeight);
+  let mst = primsMST(pairs, false);
+  console.log('Prims MinimumSpanningTree\n', mst.newAdjacencyList);
+  console.log('Prims Total Weight', mst.totalWeight);
+  mst = kruskalMST(pairs, false);
+  console.log('Kruskal MinimumSpanningTree\n', mst.newAdjacencyList);
+  console.log('Kruskal Total Weight', mst.totalWeight);
 };
 
 main();

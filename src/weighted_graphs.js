@@ -52,4 +52,23 @@ const primsMST = (pairs, isDirected) => {
   return { newAdjacencyList, totalWeight };
 };
 
-module.exports = { primsMST };
+const kruskalMST = (pairs, isDirected) => {
+  const adjacencyList = getAdjacencyList(pairs, isDirected);
+  let allEdges = Object.values(adjacencyList);
+  allEdges = allEdges.reduce((allEdges, edge) => allEdges.concat(edge), []);
+  const sortedEdges = allEdges.sort((a, b) => a.weight - b.weight);
+  const visited = [];
+  const mstEdges = [];
+  while (sortedEdges.length) {
+    const edge = sortedEdges.shift();
+    if (visited.includes(edge.vertex) && visited.includes(edge.edge)) continue;
+    !visited.includes(edge.vertex) && visited.push(edge.vertex);
+    !visited.includes(edge.edge) && visited.push(edge.edge);
+    mstEdges.push([edge.vertex, edge.edge, edge.weight]);
+  }
+  const newAdjacencyList = getAdjacencyList(mstEdges, isDirected);
+  const totalWeight = mstEdges.reduce((total, edge) => total + edge[2], 0);
+  return { newAdjacencyList, totalWeight };
+};
+
+module.exports = { primsMST, kruskalMST };
