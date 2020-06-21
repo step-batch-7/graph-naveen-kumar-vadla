@@ -1,5 +1,6 @@
 const fs = require('fs');
 const { bfs, dfs, findPath } = require('./graph');
+const { primsMST } = require('./weighted_graphs');
 
 const parseInputMakePairs = data => {
   const pairs = data.map(str => str.replace(/\|/g, '').trim().split('  '));
@@ -10,13 +11,8 @@ const main = () => {
   const data = fs.readFileSync('./src/data.txt', 'utf-8').trim().split('\n');
   const pairs = parseInputMakePairs(data);
   const questions = [
-    ['bb', 'jj'],
-    ['jj', 'aa'],
-    ['aa', 'hh'],
-    ['hh', 'ii'],
-    ['ii', 'ee'],
-    ['ee', 'mm'],
-    ['mm', 'jj'],
+    ['A', 'M'],
+    ['A', 'J'],
   ];
   for (const [source, target] of questions) {
     let result = bfs(pairs, source, target);
@@ -30,6 +26,9 @@ const main = () => {
     path.forEach((p, i) => process.stdout.write(`${p} -> `));
     console.log('\n');
   }
+  const { newAdjacencyList, totalWeight } = primsMST(pairs, false);
+  console.log('Prims MinimumSpanningTree\n', newAdjacencyList);
+  console.log('Prims Total Weight', totalWeight);
 };
 
 main();
