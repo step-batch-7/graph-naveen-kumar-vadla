@@ -26,7 +26,7 @@ const main = () => {
     path.forEach((p, i) => process.stdout.write(`${p} -> `));
     console.log('\n');
   }
-  const { newAdjacencyList, totalWeight } = primsMST(pairs, false);
+  const { newAdjacencyList, totalWeight } = primsMST(pairs, true);
   console.log('Prims MinimumSpanningTree\n', newAdjacencyList);
   console.log('Prims Total Weight', totalWeight);
 };

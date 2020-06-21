@@ -19,7 +19,8 @@ const getAdjacencyList = (pairs, isDirected) => {
 const getAllConnectedEdges = (visited, adjacencyList) => {
   const allConnectedEdges = [];
   for (const node of visited) {
-    allConnectedEdges.push(...adjacencyList[node]);
+    const edges = adjacencyList[node] || [];
+    allConnectedEdges.push(...edges);
   }
   return allConnectedEdges.filter(edge => !visited.includes(edge.edge));
 };
@@ -42,6 +43,7 @@ const primsMST = (pairs, isDirected) => {
   while (visited.length !== allNodes.length - 1) {
     visited.push(currentEdge);
     const minimumEdge = getMinimumEdge(adjacencyList, visited);
+    if (minimumEdge.weight === Infinity) continue;
     mstEdges.push([minimumEdge.vertex, minimumEdge.edge, minimumEdge.weight]);
     currentEdge = minimumEdge.edge;
   }
