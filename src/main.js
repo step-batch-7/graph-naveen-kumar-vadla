@@ -27,7 +27,7 @@ const main = () => {
 
     const path = findPath(pairs, source, target);
     process.stdout.write(`path : `);
-    path.forEach((p, i) => process.stdout.write(`${p} -> `));
+    path.forEach(p => process.stdout.write(`${p} -> `));
     console.log('\n');
   }
 
@@ -38,8 +38,8 @@ const main = () => {
   mst = kruskalMST(pairs, false);
   console.log('\nKruskal MinimumSpanningTree\n', mst.newAdjacencyList);
   console.log('Kruskal Total Weight', mst.totalWeight);
-  
-  const { table, path, weight } = dijkstrasShortestPath(pairs, true, 'A', 'J');
+
+  const { table, path, weight } = dijkstrasShortestPath(pairs, false, 'A', 'J');
   console.table("\nDijkstra's Minimum Path to all nodes from A");
   console.table(table);
   console.log("Dijkstra's Shortest Path from A to J", path);
