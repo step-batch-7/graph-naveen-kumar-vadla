@@ -22,7 +22,7 @@ const getAllConnectedEdges = (visited, adjacencyList) => {
     const edges = adjacencyList[node] || [];
     allConnectedEdges.push(...edges);
   }
-  return allConnectedEdges.filter(edge => !visited.includes(edge.edge));
+  return allConnectedEdges.filter(({ edge }) => !visited.has(edge));
 };
 
 const getMinimumEdge = (adjacencyList, visited) => {
@@ -46,15 +46,15 @@ const extractVertices = pairs => {
 const primsMST = (pairs, isDirected) => {
   const adjacencyList = getAdjacencyList(pairs, isDirected);
   const allNodes = extractVertices(pairs);
-  const visited = [];
+  const visited = new Set();
   const mstEdges = [];
   let currentEdge = allNodes[0];
-  while (visited.length !== allNodes.length - 1) {
-    visited.push(currentEdge);
-    const minimumEdge = getMinimumEdge(adjacencyList, visited);
-    if (minimumEdge.weight === Infinity) continue;
-    mstEdges.push([minimumEdge.vertex, minimumEdge.edge, minimumEdge.weight]);
-    currentEdge = minimumEdge.edge;
+  while (!allNodes.every(node => visited.has(node))) {
+    visited.add(currentEdge);
+    const { vertex, edge, weight } = getMinimumEdge(adjacencyList, visited);
+    if (weight === Infinity) break;
+    mstEdges.push([vertex, edge, weight]);
+    currentEdge = edge;
   }
   const newAdjacencyList = getAdjacencyList(mstEdges, isDirected);
   const totalWeight = mstEdges.reduce((total, edge) => total + edge[2], 0);
@@ -114,7 +114,7 @@ const updateTable = (table, node, weight, parent) => {
 
 const getMinimumOfTable = (table, processedNodes) => {
   let nodes = Object.values(table);
-  nodes = nodes.filter(edge => !processedNodes.includes(edge.source));
+  nodes = nodes.filter(edge => !processedNodes.has(edge.source));
   return nodes.reduce((min, node) => (node.weight < min.weight ? node : min), {
     weight: Infinity,
   });
@@ -143,17 +143,17 @@ const dijkstrasShortestPath = (pairs, isDirected, source, target) => {
   const adjacencyList = getAdjacencyList(pairs, isDirected);
   let allEdges = extractVertices(pairs);
   let table = createTable(allEdges, source);
-  const processedNodes = [];
+  const processedNodes = new Set();
   let nextNode = source;
-  while (processedNodes.length != allEdges.length - 1) {
+  while (!allEdges.every(edge => processedNodes.has(edge))) {
     let children = adjacencyList[nextNode] || [];
-    children = children.filter(child => !processedNodes.includes(child.edge));
-    const weight = table[nextNode].weight;
-    for (const child of children) {
-      const weightToChild = weight + child.weight;
-      updateTable(table, child.edge, weightToChild, nextNode);
+    children = children.filter(({ edge }) => !processedNodes.has(edge));
+    const weightToParent = table[nextNode].weight;
+    for (const { edge, weight } of children) {
+      const weightToChild = weightToParent + weight;
+      updateTable(table, edge, weightToChild, nextNode);
     }
-    processedNodes.push(nextNode);
+    processedNodes.add(nextNode);
     const minimumEdge = getMinimumOfTable(table, processedNodes);
     if (minimumEdge.weight === Infinity) continue;
     nextNode = minimumEdge.source;
