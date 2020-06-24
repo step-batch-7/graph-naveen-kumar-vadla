@@ -1,10 +1,8 @@
 const fs = require('fs');
 const { bfs, dfs, findPath } = require('./graph');
-const {
-  primsMST,
-  kruskalMST,
-  dijkstrasShortestPath,
-} = require('./weighted_graphs');
+const { dijkstrasShortestPath } = require('./dijkstrasShortestPath');
+const { primsMST } = require('./primsMST');
+const { kruskalMST } = require('./KruskalMST');
 
 const parseInputMakePairs = data => {
   const pairs = data.map(str => str.replace(/\|/g, '').trim().split('  '));
