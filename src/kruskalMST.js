@@ -15,10 +15,11 @@ const getParent = (parents, node) => {
   return getParent(parents, nodeParent);
 };
 
-const kruskalMST = (pairs, isDirected) => {
-  const adjacencyList = getAdjacencyList(pairs, isDirected);
-  let allEdges = Object.values(adjacencyList);
-  allEdges = allEdges.reduce((allEdges, edge) => allEdges.concat(edge), []);
+const kruskalMST = (adjacencyList, allNodes, isDirected) => {
+  const allEdges = allNodes.reduce(
+    (allEdges, node) => allEdges.concat(adjacencyList[node]),
+    []
+  );
   const sortedEdges = allEdges.sort((a, b) => a.weight - b.weight);
   const mstEdges = [];
   const parents = makeParentsStructure(sortedEdges);

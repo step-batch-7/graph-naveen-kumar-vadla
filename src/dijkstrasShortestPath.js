@@ -1,5 +1,3 @@
-const { getAdjacencyList, extractVertices } = require('./weighted_graphs_utils');
-
 const createTable = (allEdges, source) => {
   const table = {};
   for (const edge of allEdges) {
@@ -44,13 +42,11 @@ const modifyTableWithPaths = (table, source) => {
   return newTable;
 };
 
-const dijkstrasShortestPath = (pairs, isDirected, source, target) => {
-  const adjacencyList = getAdjacencyList(pairs, isDirected);
-  let allEdges = extractVertices(pairs);
-  let table = createTable(allEdges, source);
+const dijkstrasShortestPath = (adjacencyList, allNodes, source, target) => {
+  let table = createTable(allNodes, source);
   const processedNodes = new Set();
   let nextNode = source;
-  while (!allEdges.every(edge => processedNodes.has(edge))) {
+  while (!allNodes.every(edge => processedNodes.has(edge))) {
     let children = adjacencyList[nextNode] || [];
     children = children.filter(({ edge }) => !processedNodes.has(edge));
     const weightToParent = table[nextNode].weight;

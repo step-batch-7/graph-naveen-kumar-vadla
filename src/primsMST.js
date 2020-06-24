@@ -1,4 +1,4 @@
-const { getAdjacencyList, extractVertices } = require('./weighted_graphs_utils');
+const { getAdjacencyList } = require('./weighted_graphs_utils');
 
 const getAllConnectedEdges = (visited, adjacencyList) => {
   const allConnectedEdges = [];
@@ -18,9 +18,7 @@ const getMinimumEdge = (adjacencyList, visited) => {
   return minEdge;
 };
 
-const primsMST = (pairs, isDirected) => {
-  const adjacencyList = getAdjacencyList(pairs, isDirected);
-  const allNodes = extractVertices(pairs);
+const primsMST = (adjacencyList, allNodes, isDirected) => {
   const visited = new Set();
   const mstEdges = [];
   let currentEdge = allNodes[0];
