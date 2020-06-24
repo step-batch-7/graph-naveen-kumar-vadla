@@ -26,16 +26,15 @@ const getMinimumOfTable = (table, processedNodes) => {
 const getPath = (table, node, source, path) => {
   if (node === source) return path;
   const parent = table[node].parent;
-  path.unshift(parent);
+  path = parent + '->' + path;
   return getPath(table, parent, source, path);
 };
 
-const modifyTableWithPaths = (table, source) => {
+const updateTableWithPaths = (table, source) => {
   let nodes = Object.values(table);
   const newTable = {};
   for (const node of nodes) {
-    let path = getPath(table, node.source, source, []);
-    path = path.reduce((p, n) => p + n + '->', '');
+    let path = getPath(table, node.source, source, '');
     path += node.source;
     newTable[node.source] = { weight: node.weight, path };
   }
@@ -59,7 +58,7 @@ const dijkstrasShortestPath = (adjacencyList, allNodes, source, target) => {
     if (minimumEdge.weight === Infinity) continue;
     nextNode = minimumEdge.source;
   }
-  table = modifyTableWithPaths(table, source);
+  table = updateTableWithPaths(table, source);
   return { table, path: table[target].path, weight: table[target].weight };
 };
 

@@ -1,18 +1,12 @@
 const { getAdjacencyList, getMinWeighted } = require('./weighted_graphs_utils');
 
-const getAllConnectedEdges = (visited, adjacencyList) => {
-  const allConnectedEdges = [];
+const getConnectedEdges = (visited, adjacencyList) => {
+  const connectedEdges = [];
   for (const node of visited) {
     const edges = adjacencyList[node] || [];
-    allConnectedEdges.push(...edges);
+    connectedEdges.push(...edges);
   }
-  return allConnectedEdges.filter(({ edge }) => !visited.has(edge));
-};
-
-const getMinimumEdge = (adjacencyList, visited) => {
-  const allConnectedEdges = getAllConnectedEdges(visited, adjacencyList);
-  const minEdge = getMinWeighted(allConnectedEdges);
-  return minEdge;
+  return connectedEdges.filter(({ edge }) => !visited.has(edge));
 };
 
 const primsMST = (adjacencyList, allNodes, isDirected) => {
@@ -21,7 +15,8 @@ const primsMST = (adjacencyList, allNodes, isDirected) => {
   let currentEdge = allNodes[0];
   while (!allNodes.every(node => visited.has(node))) {
     visited.add(currentEdge);
-    const { vertex, edge, weight } = getMinimumEdge(adjacencyList, visited);
+    const connectedEdges = getConnectedEdges(visited, adjacencyList);
+    const { vertex, edge, weight } = getMinWeighted(connectedEdges);
     if (weight === Infinity) break;
     mstEdges.push([vertex, edge, weight]);
     currentEdge = edge;
