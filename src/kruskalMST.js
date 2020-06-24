@@ -15,12 +15,8 @@ const getParent = (parents, node) => {
   return getParent(parents, nodeParent);
 };
 
-const kruskalMST = (adjacencyList, allNodes, isDirected) => {
-  const allEdges = allNodes.reduce(
-    (allEdges, node) => allEdges.concat(adjacencyList[node]),
-    []
-  );
-  const sortedEdges = allEdges.sort((a, b) => a.weight - b.weight);
+const kruskalMST = (adjacencyList, isUndirected) => {
+  const sortedEdges = adjacencyList.sort((a, b) => a.weight - b.weight);
   const mstEdges = [];
   const parents = makeParentsStructure(sortedEdges);
   for (const { vertex, edge, weight } of sortedEdges) {
@@ -30,7 +26,7 @@ const kruskalMST = (adjacencyList, allNodes, isDirected) => {
     mstEdges.push([vertex, edge, weight]);
     parents[edgeParent] = vertexParent;
   }
-  const newAdjacencyList = getAdjacencyList(mstEdges, isDirected);
+  const newAdjacencyList = getAdjacencyList(mstEdges, isUndirected);
   const totalWeight = mstEdges.reduce((total, edge) => total + edge[2], 0);
   return { newAdjacencyList, totalWeight };
 };

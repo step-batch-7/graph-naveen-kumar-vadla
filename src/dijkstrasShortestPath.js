@@ -1,9 +1,13 @@
-const { getMinWeighted } = require('./weighted_graphs_utils');
+const {
+  getMinWeighted,
+  extractVertices,
+  getNodesOf,
+} = require('./weighted_graphs_utils');
 
-const createTable = (allEdges, source) => {
+const createTable = (allNodes, source) => {
   const table = {};
-  for (const edge of allEdges) {
-    table[edge] = { source: edge, weight: Infinity, parent: undefined };
+  for (const node of allNodes) {
+    table[node] = { source: node, weight: Infinity, parent: undefined };
   }
   table[source].weight = 0;
   return table;
@@ -41,12 +45,13 @@ const updateTableWithPaths = (table, source) => {
   return newTable;
 };
 
-const dijkstrasShortestPath = (adjacencyList, allNodes, source, target) => {
+const dijkstrasShortestPath = (adjacencyList, source, target) => {
+  const allNodes = extractVertices(adjacencyList);
   let table = createTable(allNodes, source);
   const processedNodes = new Set();
   let nextNode = source;
   while (!allNodes.every(edge => processedNodes.has(edge))) {
-    let children = adjacencyList[nextNode] || [];
+    let children = getNodesOf(adjacencyList, nextNode);
     children = children.filter(({ edge }) => !processedNodes.has(edge));
     const weightToParent = table[nextNode].weight;
     for (const { edge, weight } of children) {

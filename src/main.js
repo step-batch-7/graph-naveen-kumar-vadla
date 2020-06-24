@@ -3,10 +3,7 @@ const { bfs, dfs, findPath } = require('./graph');
 const { dijkstrasShortestPath } = require('./dijkstrasShortestPath');
 const { primsMST } = require('./primsMST');
 const { kruskalMST } = require('./KruskalMST');
-const {
-  getAdjacencyList,
-  extractVertices,
-} = require('./weighted_graphs_utils');
+const { getAdjacencyList } = require('./weighted_graphs_utils');
 
 const parseInputMakePairs = data => {
   const pairs = data.map(str => str.replace(/\|/g, '').trim().split('  '));
@@ -16,8 +13,7 @@ const parseInputMakePairs = data => {
 const main = () => {
   const data = fs.readFileSync('./src/data.txt', 'utf-8').trim().split('\n');
   const pairs = parseInputMakePairs(data);
-  const adjacencyList = getAdjacencyList(pairs, false);
-  const allNodes = extractVertices(pairs);
+  const adjacencyList = getAdjacencyList(pairs, true);
   const questions = [
     ['A', 'M'],
     ['A', 'J'],
@@ -34,16 +30,15 @@ const main = () => {
     path.forEach(p => process.stdout.write(`${p} -> `));
     console.log('\n');
   }
-
-  let mst = primsMST(adjacencyList, allNodes, false);
+  let mst = primsMST(adjacencyList, true);
   console.log('Prims MinimumSpanningTree\n', mst.newAdjacencyList);
   console.log('Prims Total Weight', mst.totalWeight);
 
-  mst = kruskalMST(adjacencyList, allNodes, false);
+  mst = kruskalMST(adjacencyList, true);
   console.log('\nKruskal MinimumSpanningTree\n', mst.newAdjacencyList);
   console.log('Kruskal Total Weight', mst.totalWeight);
 
-  const result = dijkstrasShortestPath(adjacencyList, allNodes, 'A', 'J');
+  const result = dijkstrasShortestPath(adjacencyList, 'A', 'J');
   const { table, path, weight } = result;
   console.table("\nDijkstra's Minimum Path to all nodes from A");
   console.table(table);

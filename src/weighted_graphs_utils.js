@@ -1,27 +1,19 @@
-const makeAdjacencyList = (adjacencyList, pair, isDirected) => {
+const makeAdjacencyList = (adjacencyList, pair, isUndirected) => {
   const [node, child, weight] = pair;
-  adjacencyList[node] = adjacencyList[node] || [];
-  adjacencyList[node].push({ vertex: node, edge: child, weight });
-  if (isDirected) return adjacencyList;
-  adjacencyList[child] = adjacencyList[child] || [];
-  adjacencyList[child].push({ vertex: child, edge: node, weight });
+  adjacencyList.push({ vertex: node, edge: child, weight });
+  isUndirected && adjacencyList.push({ vertex: child, edge: node, weight });
   return adjacencyList;
 };
 
-const getAdjacencyList = (pairs, isDirected) => {
-  let adjacencyList = {};
-  for (const pair of pairs) {
-    adjacencyList = makeAdjacencyList(adjacencyList, pair, isDirected);
-  }
+const getAdjacencyList = (pairs, isUndirected) => {
+  let adjacencyList = [];
+  pairs.forEach(pair => makeAdjacencyList(adjacencyList, pair, isUndirected));
   return adjacencyList;
 };
 
 const extractVertices = pairs => {
   const vertices = new Set();
-  for (const pair of pairs) {
-    vertices.add(pair[0]);
-    vertices.add(pair[1]);
-  }
+  pairs.forEach(({ vertex, edge }) => vertices.add(vertex, edge));
   return Array.from(vertices);
 };
 
@@ -33,4 +25,13 @@ const getMinWeighted = edges => {
   return minWeighted;
 };
 
-module.exports = { getAdjacencyList, extractVertices, getMinWeighted };
+const getNodesOf = (adjacencyList, node) => {
+  return adjacencyList.filter(edge => edge.vertex === node);
+};
+
+module.exports = {
+  getAdjacencyList,
+  extractVertices,
+  getMinWeighted,
+  getNodesOf,
+};
