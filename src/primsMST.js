@@ -1,4 +1,4 @@
-const { getAdjacencyList } = require('./weighted_graphs_utils');
+const { getAdjacencyList, getMinWeighted } = require('./weighted_graphs_utils');
 
 const getAllConnectedEdges = (visited, adjacencyList) => {
   const allConnectedEdges = [];
@@ -11,10 +11,7 @@ const getAllConnectedEdges = (visited, adjacencyList) => {
 
 const getMinimumEdge = (adjacencyList, visited) => {
   const allConnectedEdges = getAllConnectedEdges(visited, adjacencyList);
-  const minEdge = allConnectedEdges.reduce(
-    (minEdge, edge) => (edge.weight < minEdge.weight ? edge : minEdge),
-    { weight: Infinity }
-  );
+  const minEdge = getMinWeighted(allConnectedEdges);
   return minEdge;
 };
 

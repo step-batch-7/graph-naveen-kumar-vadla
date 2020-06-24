@@ -1,3 +1,5 @@
+const { getMinWeighted } = require('./weighted_graphs_utils');
+
 const createTable = (allEdges, source) => {
   const table = {};
   for (const edge of allEdges) {
@@ -18,9 +20,7 @@ const updateTable = (table, node, weight, parent) => {
 const getMinimumOfTable = (table, processedNodes) => {
   let nodes = Object.values(table);
   nodes = nodes.filter(edge => !processedNodes.has(edge.source));
-  return nodes.reduce((min, node) => (node.weight < min.weight ? node : min), {
-    weight: Infinity,
-  });
+  return getMinWeighted(nodes);
 };
 
 const getPath = (table, node, source, path) => {

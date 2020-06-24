@@ -25,4 +25,12 @@ const extractVertices = pairs => {
   return Array.from(vertices);
 };
 
-module.exports = { getAdjacencyList, extractVertices };
+const getMinWeighted = edges => {
+  let minWeighted = { weight: Infinity };
+  for (const edge of edges) {
+    minWeighted = edge.weight < minWeighted.weight ? edge : minWeighted;
+  }
+  return minWeighted;
+};
+
+module.exports = { getAdjacencyList, extractVertices, getMinWeighted };
