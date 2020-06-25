@@ -40,7 +40,7 @@ const main = () => {
 
   const result = dijkstrasShortestPath(adjacencyList, 'A', 'J');
   const { table, path, weight } = result;
-  console.table("\nDijkstra's Minimum Path to all nodes from A");
+  console.table("\nDijkstra's Shortest Path Table");
   console.table(table);
   console.log("Dijkstra's Shortest Path from A to J", path);
   console.log("Dijkstra's Shortest weight from A to J", weight);

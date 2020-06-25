@@ -7,7 +7,7 @@ const {
 const createTable = (allNodes, source) => {
   const table = {};
   for (const node of allNodes) {
-    table[node] = { source: node, weight: Infinity, parent: undefined };
+    table[node] = { target: node, weight: Infinity, parent: undefined };
   }
   table[source].weight = 0;
   return table;
@@ -23,7 +23,7 @@ const updateTable = (table, node, weight, parent) => {
 
 const getMinimumOfTable = (table, processedNodes) => {
   let nodes = Object.values(table);
-  nodes = nodes.filter(edge => !processedNodes.has(edge.source));
+  nodes = nodes.filter(edge => !processedNodes.has(edge.target));
   return getMinWeighted(nodes);
 };
 
@@ -32,17 +32,6 @@ const getPath = (table, node, source, path) => {
   const parent = table[node].parent;
   path = parent + '->' + path;
   return getPath(table, parent, source, path);
-};
-
-const updateTableWithPaths = (table, source) => {
-  let nodes = Object.values(table);
-  const newTable = {};
-  for (const node of nodes) {
-    let path = getPath(table, node.source, source, '');
-    path += node.source;
-    newTable[node.source] = { weight: node.weight, path };
-  }
-  return newTable;
 };
 
 const dijkstrasShortestPath = (adjacencyList, source, target) => {
@@ -62,10 +51,10 @@ const dijkstrasShortestPath = (adjacencyList, source, target) => {
     allNodes.delete(nextNode);
     const minimumEdge = getMinimumOfTable(table, processedNodes);
     if (minimumEdge.weight === Infinity) continue;
-    nextNode = minimumEdge.source;
+    nextNode = minimumEdge.target;
   }
-  table = updateTableWithPaths(table, source);
-  return { table, path: table[target].path, weight: table[target].weight };
+  const path = getPath(table, target, source, '');
+  return { table, path: path + target, weight: table[target].weight };
 };
 
 module.exports = { dijkstrasShortestPath };
