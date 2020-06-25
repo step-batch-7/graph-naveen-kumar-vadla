@@ -14,7 +14,7 @@ const getAdjacencyList = (pairs, isUndirected) => {
 const extractVertices = pairs => {
   const vertices = new Set();
   pairs.forEach(({ vertex, edge }) => vertices.add(vertex, edge));
-  return Array.from(vertices);
+  return vertices;
 };
 
 const getMinWeighted = edges => {

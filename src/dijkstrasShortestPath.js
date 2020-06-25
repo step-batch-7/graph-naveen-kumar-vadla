@@ -50,7 +50,7 @@ const dijkstrasShortestPath = (adjacencyList, source, target) => {
   let table = createTable(allNodes, source);
   const processedNodes = new Set();
   let nextNode = source;
-  while (!allNodes.every(edge => processedNodes.has(edge))) {
+  while (allNodes.size) {
     let children = getNodesOf(adjacencyList, nextNode);
     children = children.filter(({ edge }) => !processedNodes.has(edge));
     const weightToParent = table[nextNode].weight;
@@ -59,6 +59,7 @@ const dijkstrasShortestPath = (adjacencyList, source, target) => {
       updateTable(table, edge, weightToChild, nextNode);
     }
     processedNodes.add(nextNode);
+    allNodes.delete(nextNode);
     const minimumEdge = getMinimumOfTable(table, processedNodes);
     if (minimumEdge.weight === Infinity) continue;
     nextNode = minimumEdge.source;

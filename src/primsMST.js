@@ -19,8 +19,9 @@ const primsMST = (adjacencyList, isUndirected) => {
   const visited = new Set();
   const mstEdges = [];
   let currentEdge = allNodes[0];
-  while (!allNodes.every(node => visited.has(node))) {
+  while (allNodes.size) {
     visited.add(currentEdge);
+    allNodes.delete(currentEdge);
     const connectedEdges = getConnectedEdges(visited, adjacencyList);
     const { vertex, edge, weight } = getMinWeighted(connectedEdges);
     if (weight === Infinity) break;
